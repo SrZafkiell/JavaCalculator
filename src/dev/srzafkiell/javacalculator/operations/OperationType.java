@@ -51,7 +51,7 @@ public enum OperationType {
 	 */
 	public static OperationType fromSymbol(String symbol) {
 		for (OperationType type : values()) {
-			if (type.symbol.equals(symbol)) {
+			if (type.symbol.equals(symbol.toLowerCase())) {
 				return type;
 			}
 		}
