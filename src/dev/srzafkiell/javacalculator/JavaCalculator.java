@@ -34,9 +34,18 @@ public class JavaCalculator {
 	private void calculatorLoop(){
 		Scanner scanner = new Scanner(System.in);
 		String message = "";
+		String askingString = null;
 		double result;
 
 		while (!message.equalsIgnoreCase("exit")) {
+			if (operandData[0][1] == 0 && operandData[1][1] == 0){
+				askingString = "Please write the first operand";
+			} else if ((operandData[0][1] == 1) && (operandData[1][1] == 0)) {
+				askingString = "Please write the second operand";
+			}
+			if (!(operandData[0][1] == 1) || !(operandData[1][1] == 1)){
+				System.out.println(askingString);
+			}
 			message = scanner.nextLine();
 
 			/*
@@ -48,12 +57,11 @@ public class JavaCalculator {
 					if (operandData[0][1] == 0){
 						operandData[0][0] = Double.parseDouble(message); // Converts the number in the message to Double and stores it.
 						operandData[0][1] = 1; // Establish the operand one status as already set.
-					} else {
-						if (operandData[1][1] == 0) {
+					} else if (operandData[1][1] == 0) {
 							operandData[1][0] = Double.parseDouble(message); // Converts the number in the message to Double and stores it.
 							operandData[1][1] = 1; // Establish the operand two status as already set.
+							System.out.println("Please write the operation you want to use: (+), (-), (*), (/), (%), (log) "); // Doesn't need to be case-sensitive.
 							continue;
-						}
 					}
 				} catch (NumberFormatException exception) {
 					System.out.println(message + " is not a number.");
@@ -62,7 +70,6 @@ public class JavaCalculator {
 
 			if ((operandData[0][1] == 1) && (operandData[1][1] == 1)) {
 				try {
-					System.out.println("Please write the operation you want to use: (+), (-), (*), (/), (%), (log) "); // Doesn't need to be case-sensitive.
 					OperationType operationType = OperationType.fromSymbol(message); // Returns the operation type. Example: ADDITION.
 					Operation operation = getOperation(operationType); // Get the operation object for the operation type from above.
 					result = calculate(operation, operandData[0][0] , operandData[1][0]); // Now with the operands and the operation type, it gets the result.
