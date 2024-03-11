@@ -34,41 +34,35 @@ public class JavaCalculator {
 	private void calculatorLoop(){
 		Scanner scanner = new Scanner(System.in);
 		String message = "";
-		String askingString = null;
 		double result;
 
 		while (!message.equalsIgnoreCase("exit")) {
-			if (operandData[0][1] == 0 && operandData[1][1] == 0){
-				askingString = "Please write the first operand";
-			} else if ((operandData[0][1] == 1) && (operandData[1][1] == 0)) {
-				askingString = "Please write the second operand";
-			}
-			if (!(operandData[0][1] == 1) || !(operandData[1][1] == 1)){
-				System.out.println(askingString);
-			}
-			message = scanner.nextLine();
+
+			System.out.println(whatToAskFor()); // This ask for what it should ask for in the console and prints it.
+			message = scanner.nextLine(); // Reads the message to be analyzed by the calculator.
 
 			/*
 			 * If the first and second operand status is one (1).
 			 * It would mean that we have the operands already to be operated, we can start reading the operation to be made.
 			 */
-			if ((operandData[0][1] == 0) || (operandData[1][1] == 0)){
+			if (isFirstOperandNotSet() || isSecondOperandNotSet()){ // Check if both operands are not set and proceeds with the try and catch.
 				try {
-					if (operandData[0][1] == 0){
+					if (isFirstOperandNotSet()){
 						operandData[0][0] = Double.parseDouble(message); // Converts the number in the message to Double and stores it.
-						operandData[0][1] = 1; // Establish the operand one status as already set.
-					} else if (operandData[1][1] == 0) {
+						setOperandAsEstablished(0); // Establish the operand one status as already set.
+					} else if (isSecondOperandNotSet()) { // NOTE: I don't know why IntelliJ is telling me this is always true.
 							operandData[1][0] = Double.parseDouble(message); // Converts the number in the message to Double and stores it.
-							operandData[1][1] = 1; // Establish the operand two status as already set.
-							System.out.println("Please write the operation you want to use: (+), (-), (*), (/), (%), (log) "); // Doesn't need to be case-sensitive.
+							setOperandAsEstablished(1);	// Establish the operand two status as already set.
 							continue;
 					}
 				} catch (NumberFormatException exception) {
-					System.out.println(message + " is not a number.");
+					// We could add an error handling function here and remove this simple message to make it more "professional".
+					// Will think about a better error handling method in the future.
+					System.out.println("ERROR: " + message + " is not a number.");
 				}
 			}
 
-			if ((operandData[0][1] == 1) && (operandData[1][1] == 1)) {
+			if (!isFirstOperandNotSet() && !isSecondOperandNotSet()) { // Check if both operands are now set and then proceeds with the try and catch.
 				try {
 					OperationType operationType = OperationType.fromSymbol(message); // Returns the operation type. Example: ADDITION.
 					Operation operation = getOperation(operationType); // Get the operation object for the operation type from above.
@@ -81,11 +75,49 @@ public class JavaCalculator {
 					System.out.println("Starting a new operation.");
 					cleanOperands(); // Clean the operand array to continue with a new calculation.
 				} catch (IllegalArgumentException exception){
-					System.out.println("Unknown operation: " + message);
+					// We could add an error handling function here and remove this simple message to make it more "professional".
+					// Will think about a better error handling method in the future.
+					System.out.println("ERROR: " + "Unknown operation " + message);
 				}
 			}
 		}
 		System.out.println("You are leaving? I'm going back to the dark GitHub library for the eternity :(");
+	}
+
+	/**
+	 * This method is to simplify the way the calculator asks for input.
+	 * @return The correct string for the number or the operand needed.
+	 */
+	private String whatToAskFor(){
+		if (isFirstOperandNotSet()){
+			return "Please write the first operand";
+		} else if (isSecondOperandNotSet()) {
+			return "Please write the second operand";
+		} else {
+			return "Please write the operation you want to use: (+), (-), (*), (/), (%), (log) "; // Doesn't need to be case-sensitive.
+		}
+	}
+
+	/**
+	 * @return First operand set status
+	 */
+	private boolean isFirstOperandNotSet(){
+		return operandData[0][1] != 1;
+	}
+
+	/**
+	 * @return Second operand set status
+	 */
+	private boolean isSecondOperandNotSet(){
+		return operandData[1][1] != 1;
+	}
+
+	/**
+	 * Sets the given operand id as established in the system.
+	 * @param operandNumber Operand id to be set as established. This is zero(0) for the first operand and one(1) for the second operand.
+	 */
+	private void setOperandAsEstablished(int operandNumber){
+		operandData[operandNumber][1] = 1;
 	}
 
 	/**
@@ -114,3 +146,5 @@ public class JavaCalculator {
 		};
 	}
 }
+
+// There are a lot of comments and Javadocs in this o_O. My future me will HAVE to understand this again.
