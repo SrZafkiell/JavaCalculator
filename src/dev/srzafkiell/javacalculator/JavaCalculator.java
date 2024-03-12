@@ -5,7 +5,6 @@ Compiled using Java 21.
 package dev.srzafkiell.javacalculator;
 
 import dev.srzafkiell.javacalculator.operations.*;
-import dev.srzafkiell.javacalculator.operations.Module;
 
 import java.util.Objects;
 import java.util.Scanner;
@@ -18,10 +17,6 @@ public class JavaCalculator {
 	 * Status: If the assignment status is zero (0), it means it hasn't been assigned. If it is one (1) it has been assigned.
 	 */
 	private final double[][] operandData = new double[2][2];
-
-	public double calculate(Operation operation, double numberOne, double numberTwo){
-		return operation.perform(numberOne, numberTwo);
-	}
 
 	public static void main(String[] args) {
 		JavaCalculator javaCalculator = new JavaCalculator();
@@ -65,8 +60,8 @@ public class JavaCalculator {
 			if (!isFirstOperandNotSet() && !isSecondOperandNotSet()) { // Check if both operands are now set and then proceeds with the try and catch.
 				try {
 					OperationType operationType = OperationType.fromSymbol(message); // Returns the operation type. Example: ADDITION.
-					Operation operation = getOperation(operationType); // Get the operation object for the operation type from above.
-					result = calculate(operation, operandData[0][0] , operandData[1][0]); // Now with the operands and the operation type, it gets the result.
+					OperationType operation = getOperation(operationType); // Get the operation object for the operation type from above.
+					result = operation.perform(operandData[0][0] , operandData[1][0]); // Now with the operands and the operation type, it gets the result.
 					if (!Objects.equals(operationType.getName(), "Logarithm")){ // If the operation is not a logarithm, sends the normal message for the result, if it is, sends a different message.
 						System.out.println("Operation " + operandData[0][0] + " " + operationType.getSymbol() + " " + operandData[1][0] + " = " + result); // Normal line
 					} else {
@@ -135,14 +130,14 @@ public class JavaCalculator {
 	 * @param operationType Given operation type, for example, "ADDITION".
 	 * @return Object for the operation type given
 	 */
-	private Operation getOperation(OperationType operationType){
+	private OperationType getOperation(OperationType operationType){
 		return switch (operationType) {
-			case ADDITION -> new Addition();
-			case SUBTRACTION -> new Subtraction();
-			case MULTIPLICATION -> new Multiplication();
-			case DIVISION -> new Division();
-			case MODULE -> new Module();
-			case LOG -> new Logarithm();
+			case ADDITION -> OperationType.ADDITION;
+			case SUBTRACTION -> OperationType.SUBTRACTION;
+			case MULTIPLICATION -> OperationType.MULTIPLICATION;
+			case DIVISION -> OperationType.DIVISION;
+			case MODULE -> OperationType.MODULE;
+			case LOG -> OperationType.LOG;
 		};
 	}
 }

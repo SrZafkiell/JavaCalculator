@@ -2,12 +2,78 @@ package dev.srzafkiell.javacalculator.operations;
 
 public enum OperationType {
 
-	ADDITION("+", "Addition"),
-	SUBTRACTION("-", "Subtraction"),
-	MULTIPLICATION("*", "Multiplication"),
-	DIVISION("/", "Division"),
-	MODULE("%", "Module"),
-	LOG("log", "Logarithm");
+	ADDITION("+", "Addition"){
+		/**
+		 * @param numberOne First operand.
+		 * @param numberTwo Second operand.
+		 * @return The addition of the first and second operand.
+		 */
+		@Override
+		public double perform(double numberOne, double numberTwo) {
+			return numberOne + numberTwo;
+		}
+	},
+	SUBTRACTION("-", "Subtraction"){
+		/**
+		 * @param numberOne First operand.
+		 * @param numberTwo Second operand.
+		 * @return Subtract the second operand from the first.
+		 */
+		@Override
+		public double perform(double numberOne, double numberTwo) {
+			return numberOne - numberTwo;
+		}
+	},
+	MULTIPLICATION("*", "Multiplication"){
+		/**
+		 *
+		 * @param numberOne First operand.
+		 * @param numberTwo Second operand.
+		 * @return Multiplication of the first operand with the second operand.
+		 */
+		@Override
+		public double perform(double numberOne, double numberTwo) {
+			return numberOne * numberTwo;
+		}
+	},
+	DIVISION("/", "Division"){
+		/**
+		 * @throws IllegalArgumentException When the numberTwo equals to zero.
+		 * @param numberOne First operand.
+		 * @param numberTwo Second operand.
+		 * @return Division of the first operand by the second operand.
+		 */
+		@Override
+		public double perform(double numberOne, double numberTwo) {
+			if (numberTwo == 0){
+				throw new IllegalArgumentException("Can't divide by zero");
+			}
+			return numberOne / numberTwo;
+		}
+	},
+	MODULE("%", "Module"){
+		/**
+		 * @param numberOne First operand.
+		 * @param numberTwo Second operand.
+		 * @return Residue of the division of the first operand and the second operand.
+		 */
+		@Override
+		public double perform(double numberOne, double numberTwo) {
+			return numberOne % numberTwo;
+		}
+	},
+	LOG("log", "Logarithm"){
+		/**
+		 * Logarithm calculation, the second number will be taken as the base.
+		 * @param numberOne First operand.
+		 * @param numberTwo Logarithm base.
+		 * @return Result of the logarithm using the given operands.
+		 */
+		@Override
+		public double perform(double numberOne, double numberTwo) {
+			return Math.log(numberOne)/Math.log(numberTwo);
+		}
+	};
 
 	/**
 	 * Representing symbol for the operations -> "+", "-", "*", "/", "%", "Log".
@@ -58,4 +124,6 @@ public enum OperationType {
 		throw new IllegalArgumentException();
 		// If we don't want to raise an error and let the program continue, > return null;
 	}
+
+	public abstract double perform(double numberOne, double numberTwo);
 }
