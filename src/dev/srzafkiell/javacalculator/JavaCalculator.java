@@ -14,7 +14,7 @@ public class JavaCalculator {
 	/**
 	 * Multidimensional array that stores the operands to be operated. <br>
 	 * Scheme: [Operand value][Assignment status]. <br>
-	 * Status: If the assignment status is zero (0), it means it hasn't been assigned. If it is one (1) it has been assigned.
+	 * Status: If the assignment status is zero (0), it means it hasn't been assigned. If it is one (1), it has been assigned.
 	 */
 	private final double[][] operandData = new double[2][2];
 
@@ -41,6 +41,7 @@ public class JavaCalculator {
 			 * It would mean that we have the operands already to be operated, we can start reading the operation to be made.
 			 */
 			if (isFirstOperandNotSet() || isSecondOperandNotSet()){ // Check if both operands are not set and proceeds with the try and catch.
+
 				try {
 					if (isFirstOperandNotSet()){
 						operandData[0][0] = Double.parseDouble(message); // Converts the number in the message to Double and stores it.
